@@ -27,6 +27,12 @@ if (LINE !== LINE.trim() || LINE.includes("\n") || LINE.includes("\r")) {
   console.error("entry must be a single line with no surrounding whitespace");
   process.exit(1);
 }
+// ASCII only, per the header: the gate reads bytes, and a non-ASCII
+// character would change the byte count the grader sees.
+if (/[^\x00-\x7F]/.test(LINE)) {
+  console.error("entry must be ASCII only");
+  process.exit(1);
+}
 
 // Write to MAKEFUN_OUTPUT_DIR when set, and to /output as well, so the gate
 // finds the file either way. Dedupe first: when the harness already points
